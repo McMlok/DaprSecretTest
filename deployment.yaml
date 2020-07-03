@@ -1,0 +1,36 @@
+# ASP.NET Core Application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dapr-k8s-secrets
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+        name: dapr-k8s-secrets
+  template:
+    metadata:
+      labels:
+        name: dapr-k8s-secrets
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "dapr-k8s-secrets"
+        dapr.io/port: "80"
+    spec:
+      containers:
+        - name: dapr-k8s-secrets
+          image: daprk8ssecretstest:latest
+          ports:
+            - containerPort: 80
+          imagePullPolicy: IfNotPresent
+---
+# Create a Kubernetes Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: super-secret
+  namespace: default
+type: Opaque
+data:
+  super-secret: bW9qZUhlc2xvWkRhcHJ1
